@@ -91,14 +91,7 @@ static NSString * const kTableViewCellContentView = @"UITableViewCellContentView
     // Add the cell scroll view to the cell
     UIView *contentViewParent = self;
     UIView *clipViewParent = self.cellScrollView;
-    //[self.contentView superview];// iOS14 加入这行代码可解决闪退问题，但是会导致table select规律性失效
-    //不需要兼容ios 7了 故注释下面部分
-    //if (![NSStringFromClass([[self.subviews objectAtIndex:0] class]) isEqualToString:kTableViewCellContentView])
-    //{
-    //    // iOS 7
-    //    contentViewParent = [self.subviews objectAtIndex:0];
-    //    clipViewParent = self;
-    //}
+    [self.contentView superview];// iOS14 加入这行代码可解决闪退问题，但是会导致table select规律性失效
     NSArray *cellSubviews = [contentViewParent subviews];
     [self insertSubview:self.cellScrollView atIndex:0];
     for (UIView *subview in cellSubviews)
@@ -405,13 +398,11 @@ static NSString * const kTableViewPanState = @"state";
 {
     if (_cellState == kCellStateCenter)
     {
-        if (self.isSelected)
-        {
-            [self deselectCell];
-        }
-        else if (self.shouldHighlight) // UITableView refuses selection if highlight is also refused.
+        if (self.shouldHighlight) // UITableView refuses selection if highlight is also refused.
         {
             [self selectCell];
+        }else {
+            [self deselectCell];
         }
     }
     else
